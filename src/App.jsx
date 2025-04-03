@@ -1,13 +1,17 @@
 import React from 'react'
 
-function App() {
+function App({ task, onComplete, onDelete }) {
   return (
-    <div className=' flex flex-col width-[20px]'>
-      <input type="checkbox" name="" id="" /><input type="text" className=' border-[2px] width-[10px]' />
-      <input type="checkbox" name="" id="" /><input type="text" className=' border-[2px] width-[10px]' />
-      <input type="checkbox" name="" id="" /><input type="text" className=' border-[2px] width-[10px]' />
+    <div className="task">
+      <input 
+        type="checkbox" 
+        checked={task.completed}
+        onChange={() => onComplete(task.id)}     
+      />
+      <span className={task.completed ? 'completed' : ''}>{task.name}</span>
+      <button onClick={() => onDelete(task.id)}>Delete</button>
     </div>
-  )
+  );
 }
-
 export default App      
+  
