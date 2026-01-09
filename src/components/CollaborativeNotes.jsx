@@ -124,21 +124,21 @@ const CollaborativeNotes = () => {
   return (
     <div className="space-y-6">
       {/* Note Editor */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-purple-800 mb-4">📝 Collaborative Notes</h2>
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4">📝 Collaborative Notes</h2>
         
-        <div className="grid md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4">
           <input
             type="text"
             value={currentNote.title}
             onChange={(e) => setCurrentNote({...currentNote, title: e.target.value})}
             placeholder="Note title..."
-            className="p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            className="p-2 sm:p-3 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
           />
           <select
             value={currentNote.subject}
             onChange={(e) => setCurrentNote({...currentNote, subject: e.target.value})}
-            className="p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            className="p-2 sm:p-3 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
           >
             <option value="">Select Subject</option>
             {subjects.map(subject => (
@@ -151,12 +151,12 @@ const CollaborativeNotes = () => {
           value={currentNote.content}
           onChange={(e) => setCurrentNote({...currentNote, content: e.target.value})}
           placeholder="Start writing your notes here..."
-          className="w-full h-40 p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 mb-4"
+          className="w-full h-32 sm:h-40 p-2 sm:p-3 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 mb-4"
         />
 
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-1 sm:gap-2 mb-4">
           {currentNote.tags.map(tag => (
-            <span key={tag} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+            <span key={tag} className="bg-purple-100 text-purple-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm flex items-center gap-1">
               {tag}
               <button onClick={() => removeTag(tag)} className="text-purple-600 hover:text-purple-800">×</button>
             </span>
@@ -164,7 +164,7 @@ const CollaborativeNotes = () => {
           <input
             type="text"
             placeholder="Add tag..."
-            className="px-3 py-1 border border-purple-300 rounded-full text-sm"
+            className="px-2 sm:px-3 py-1 border border-purple-300 rounded-full text-xs sm:text-sm"
             onKeyPress={(e) => {
               if (e.key === 'Enter') {
                 addTag(e.target.value);
@@ -174,42 +174,42 @@ const CollaborativeNotes = () => {
           />
         </div>
 
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <button
             onClick={saveNote}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
             {currentNote.id ? 'Update Note' : 'Save Note'}
           </button>
           {currentNote.content && (
             <button
               onClick={() => generateQuizQuestions(currentNote.content)}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
               Generate Quiz
             </button>
           )}
         </div>
 
-        <div className="text-sm text-gray-600">
+        <div className="text-xs sm:text-sm text-gray-600">
           <span className="font-medium">Collaborators:</span> {currentNote.collaborators.join(', ')}
         </div>
       </div>
 
       {/* Search and Filter */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <div className="flex gap-4">
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search notes..."
-            className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            className="flex-1 p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
           />
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            className="p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
           >
             <option value="all">All Subjects</option>
             {subjects.map(subject => (
@@ -220,12 +220,12 @@ const CollaborativeNotes = () => {
       </div>
 
       {/* Notes List */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
         {filteredNotes.map(note => (
-          <div key={note.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+          <div key={note.id} className="bg-white rounded-lg shadow-md p-3 sm:p-4 hover:shadow-lg transition-shadow">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-semibold text-gray-800 truncate">{note.title}</h3>
-              <div className="flex gap-1">
+              <h3 className="font-semibold text-gray-800 truncate text-sm sm:text-base pr-2">{note.title}</h3>
+              <div className="flex gap-1 flex-shrink-0">
                 <button
                   onClick={() => editNote(note)}
                   className="text-blue-600 hover:text-blue-800 text-sm"
@@ -247,7 +247,7 @@ const CollaborativeNotes = () => {
               </div>
             )}
             
-            <p className="text-gray-600 text-sm mb-3 line-clamp-3">
+            <p className="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-3">
               {generateSummary(note.content)}
             </p>
             
@@ -287,30 +287,30 @@ const CollaborativeNotes = () => {
 
       {/* Quiz Generator Modal */}
       {showQuizGenerator && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 sm:p-6 max-w-2xl w-full max-h-96 overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-purple-800">🧠 Generated Quiz Questions</h3>
+              <h3 className="text-base sm:text-lg font-bold text-purple-800">🧠 Generated Quiz Questions</h3>
               <button
                 onClick={() => setShowQuizGenerator(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 text-lg"
               >
                 ✕
               </button>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {generatedQuiz.map(question => (
-                <div key={question.id} className="border border-purple-200 rounded-lg p-4">
-                  <div className="font-medium text-gray-800 mb-2">
+                <div key={question.id} className="border border-purple-200 rounded-lg p-3 sm:p-4">
+                  <div className="font-medium text-gray-800 mb-2 text-sm sm:text-base">
                     Q{question.id}: {question.question}
                   </div>
-                  <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                  <div className="text-xs sm:text-sm text-gray-600 bg-gray-50 p-2 rounded">
                     Context: {question.context}
                   </div>
                   <textarea
                     placeholder="Your answer..."
-                    className="w-full mt-2 p-2 border border-gray-300 rounded text-sm"
+                    className="w-full mt-2 p-2 border border-gray-300 rounded text-xs sm:text-sm"
                     rows="2"
                   />
                 </div>

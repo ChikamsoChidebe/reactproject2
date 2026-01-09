@@ -1,0 +1,73 @@
+/* Love Eagles Academic Planner - Responsive Styles */
+
+/* Mobile-first responsive design */
+@media (max-width: 640px) {
+  /* Ensure text is readable on mobile */
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Improve touch targets */
+  button, input, select, textarea {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Better spacing for mobile */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Prevent horizontal scroll */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Improve form inputs on mobile */
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="date"], 
+  textarea, 
+  select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    -webkit-appearance: none;
+    border-radius: 8px;
+  }
+
+  /* Better modal handling on mobile */
+  .modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+
+  /* Improve table responsiveness */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Focus mode styles */
+.focus-mode {
+  filter: brightness(0.95);
+  transition: all 0.3s ease;
+}
+
+/* Smooth transitions for better UX */
+* {
+  transition: all 0.2s ease;
+}
+
+/* Improve accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

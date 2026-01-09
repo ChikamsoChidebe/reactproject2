@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useFirestore } from '../hooks/useFirebase';
 import AcademicPlanner from './AcademicPlanner';
 import TaskSuggestions from './TaskSuggestions';
 import CollaborativeNotes from './CollaborativeNotes';
@@ -9,10 +10,24 @@ import VoiceCommands from './VoiceCommands';
 import AICoach from './AICoach';
 import ReflectionJournal from './ReflectionJournal';
 
-const Dashboard = () => {
+const Dashboard = ({ user }) => {
+  const { data: userPrefs, saveData: savePrefs } = useFirestore('preferences', user?.uid);
   const [activeTab, setActiveTab] = useState('planner');
   const [focusMode, setFocusMode] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (userPrefs.length > 0) {
+      const prefs = userPrefs[0];
+      setFocusMode(prefs.focusMode || false);
+      setDarkMode(prefs.darkMode || false);
+    }
+  }, [userPrefs]);
+
+  const updatePreferences = (key, value) => {
+    const newPrefs = { [key]: value };
+    if (user) savePrefs('settings', newPrefs);
+  };
 
   const tabs = [
     { id: 'planner', name: 'Planner', icon: '📅' },
@@ -28,7 +43,7 @@ const Dashboard = () => {
 
   const renderActiveComponent = () => {
     switch (activeTab) {
-      case 'planner': return <AcademicPlanner />;
+      case 'planner': return <AcademicPlanner user={user} />;
       case 'tasks': return <TaskSuggestions />;
       case 'notes': return <CollaborativeNotes />;
       case 'mood': return <MoodTracker />;
@@ -62,13 +77,19 @@ const Dashboard = () => {
                 In God We Trust ✨
               </span>
               <button
-                onClick={() => setFocusMode(!focusMode)}
+                onClick={() => {
+                  setFocusMode(!focusMode);
+                  updatePreferences('focusMode', !focusMode);
+                }}
                 className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200 text-sm font-medium"
               >
                 {focusMode ? '🔓 Exit Focus' : '🔒 Focus Mode'}
               </button>
               <button
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={() => {
+                  setDarkMode(!darkMode);
+                  updatePreferences('darkMode', !darkMode);
+                }}
                 className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl hover:bg-white/30 transition-all duration-200"
               >
                 {darkMode ? '☀️' : '🌙'}

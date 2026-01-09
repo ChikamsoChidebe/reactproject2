@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useFirestore } from '../hooks/useFirebase';
 
-const AcademicPlanner = () => {
-  const [goals, setGoals] = useState(() => JSON.parse(localStorage.getItem('goals') || '[]'));
-  const [assignments, setAssignments] = useState(() => JSON.parse(localStorage.getItem('assignments') || '[]'));
+const AcademicPlanner = ({ user }) => {
+  const { data: goals, saveData: saveGoal } = useFirestore('goals', user?.uid);
+  const { data: assignments, saveData: saveAssignment } = useFirestore('assignments', user?.uid);
+  const [localGoals, setLocalGoals] = useState([]);
+  const [localAssignments, setLocalAssignments] = useState([]);
   const [newGoal, setNewGoal] = useState('');
   const [newAssignment, setNewAssignment] = useState({
     title: '',
@@ -13,31 +16,43 @@ const AcademicPlanner = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('goals', JSON.stringify(goals));
-    localStorage.setItem('assignments', JSON.stringify(assignments));
-  }, [goals, assignments]);
+    if (goals.length > 0) setLocalGoals(goals);
+  }, [goals]);
+
+  useEffect(() => {
+    if (assignments.length > 0) setLocalAssignments(assignments);
+  }, [assignments]);
+
+  useEffect(() => {
+    localStorage.setItem('goals', JSON.stringify(localGoals));
+    localStorage.setItem('assignments', JSON.stringify(localAssignments));
+  }, [localGoals, localAssignments]);
 
   const addGoal = () => {
     if (newGoal.trim()) {
-      setGoals([...goals, {
+      const goal = {
         id: Date.now(),
         text: newGoal,
         completed: false,
         progress: 0,
         createdAt: new Date().toISOString()
-      }]);
+      };
+      setLocalGoals([...localGoals, goal]);
+      if (user) saveGoal(goal.id.toString(), goal);
       setNewGoal('');
     }
   };
 
   const addAssignment = () => {
     if (newAssignment.title && newAssignment.dueDate) {
-      setAssignments([...assignments, {
+      const assignment = {
         ...newAssignment,
         id: Date.now(),
         completed: false,
         createdAt: new Date().toISOString()
-      }]);
+      };
+      setLocalAssignments([...localAssignments, assignment]);
+      if (user) saveAssignment(assignment.id.toString(), assignment);
       setNewAssignment({
         title: '',
         subject: '',
@@ -49,9 +64,14 @@ const AcademicPlanner = () => {
   };
 
   const updateProgress = (goalId, progress) => {
-    setGoals(goals.map(goal => 
+    const updatedGoals = localGoals.map(goal => 
       goal.id === goalId ? { ...goal, progress } : goal
-    ));
+    );
+    setLocalGoals(updatedGoals);
+    if (user) {
+      const goal = updatedGoals.find(g => g.id === goalId);
+      saveGoal(goalId.toString(), goal);
+    }
   };
 
   const toggleComplete = (id, type) => {
@@ -77,7 +97,7 @@ const AcademicPlanner = () => {
 
   const getUpcomingDeadlines = () => {
     const now = new Date();
-    const upcoming = assignments.filter(assignment => {
+    const upcoming = localAssignments.filter(assignment => {
       const dueDate = new Date(assignment.dueDate);
       const diffTime = dueDate - now;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -125,7 +145,7 @@ const AcademicPlanner = () => {
           </div>
 
           <div className="space-y-3">
-            {goals.map(goal => (
+            {localGoals.map(goal => (
               <div key={goal.id} className="border border-purple-200 rounded-lg p-3">
                 <div className="flex items-center justify-between mb-2">
                   <span className={`text-sm sm:text-base ${goal.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
@@ -221,7 +241,7 @@ const AcademicPlanner = () => {
           </div>
 
           <div className="space-y-2 max-h-96 overflow-y-auto">
-            {assignments
+            {localAssignments
               .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
               .map(assignment => (
               <div key={assignment.id} className={`border-l-4 p-3 rounded-lg ${getPriorityColor(assignment.priority)}`}>

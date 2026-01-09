@@ -131,31 +131,31 @@ const PerformanceInsights = () => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-purple-600 mb-2">{insights.completionRate}%</div>
-          <div className="text-gray-600 text-sm">Assignment Completion</div>
-          <div className={`mt-2 px-3 py-1 rounded-full text-xs ${getPerformanceLevel(insights.completionRate).bg} ${getPerformanceLevel(insights.completionRate).color}`}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        <div className="glass rounded-2xl shadow-lg p-4 sm:p-8 text-center card-hover">
+          <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent mb-2 sm:mb-3">{insights.completionRate}%</div>
+          <div className="text-gray-600 text-xs sm:text-sm font-medium">Assignment Completion</div>
+          <div className={`mt-2 sm:mt-3 px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs font-semibold ${getPerformanceLevel(insights.completionRate).bg} ${getPerformanceLevel(insights.completionRate).color}`}>
             {getPerformanceLevel(insights.completionRate).level}
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-green-600 mb-2">{insights.avgGoalProgress}%</div>
-          <div className="text-gray-600 text-sm">Average Goal Progress</div>
-          <div className="text-xs text-gray-500 mt-2">{insights.totalGoals} active goals</div>
+        <div className="glass rounded-2xl shadow-lg p-8 text-center card-hover">
+          <div className="text-4xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent mb-3">{insights.avgGoalProgress}%</div>
+          <div className="text-gray-600 text-sm font-medium">Average Goal Progress</div>
+          <div className="text-xs text-gray-500 mt-3 bg-white/50 px-3 py-1 rounded-full">{insights.totalGoals} active goals</div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-blue-600 mb-2">{insights.avgDailyHours}h</div>
-          <div className="text-gray-600 text-sm">Daily Study Average</div>
-          <div className="text-xs text-gray-500 mt-2">{insights.totalStudyHours}h total</div>
+        <div className="glass rounded-2xl shadow-lg p-8 text-center card-hover">
+          <div className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-cyan-600 bg-clip-text text-transparent mb-3">{insights.avgDailyHours}h</div>
+          <div className="text-gray-600 text-sm font-medium">Daily Study Average</div>
+          <div className="text-xs text-gray-500 mt-3 bg-white/50 px-3 py-1 rounded-full">{insights.totalStudyHours}h total</div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-orange-600 mb-2">{insights.avgMood}/10</div>
-          <div className="text-gray-600 text-sm">Average Energy Level</div>
-          <div className="text-xs text-gray-500 mt-2">Mood correlation</div>
+        <div className="glass rounded-2xl shadow-lg p-8 text-center card-hover">
+          <div className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent mb-3">{insights.avgMood}/10</div>
+          <div className="text-gray-600 text-sm font-medium">Average Energy Level</div>
+          <div className="text-xs text-gray-500 mt-3 bg-white/50 px-3 py-1 rounded-full">Mood correlation</div>
         </div>
       </div>
 

@@ -166,97 +166,102 @@ const ReflectionJournal = () => {
   return (
     <div className="space-y-6">
       {/* Today's Entry */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-purple-800">📖 Daily Reflection</h2>
-          <div className="text-sm text-gray-600">
+      <div className="glass rounded-2xl shadow-xl p-8 card-hover">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold gradient-text">📖 Daily Reflection</h2>
+          <div className="text-sm text-gray-600 bg-white/50 px-3 py-1 rounded-full">
             {new Date().toLocaleDateString()} • Streak: {streak} days 🔥
           </div>
         </div>
 
         <div className="space-y-6">
           {/* Accomplishments */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              🎯 What did I accomplish today?
+          <div className="glass rounded-2xl p-6 card-hover">
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
+              <span className="text-2xl">🎯</span>
+              What did I accomplish today?
             </label>
-            <p className="text-sm text-gray-500 mb-2 italic">
+            <p className="text-sm text-gray-500 mb-3 italic">
               {getRandomPrompt('accomplishments')}
             </p>
             <textarea
               value={todayEntry.accomplishments}
               onChange={(e) => setTodayEntry({...todayEntry, accomplishments: e.target.value})}
-              className="w-full h-24 p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              className="w-full h-24 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
               placeholder="Write about your achievements, progress, and wins today..."
             />
           </div>
 
           {/* Gratitude */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              🙏 What am I grateful for?
+          <div className="glass rounded-2xl p-6 card-hover">
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
+              <span className="text-2xl">🙏</span>
+              What am I grateful for?
             </label>
-            <p className="text-sm text-gray-500 mb-2 italic">
+            <p className="text-sm text-gray-500 mb-3 italic">
               {getRandomPrompt('gratitude')}
             </p>
             <textarea
               value={todayEntry.gratitude}
               onChange={(e) => setTodayEntry({...todayEntry, gratitude: e.target.value})}
-              className="w-full h-24 p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              className="w-full h-24 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
               placeholder="Express gratitude for people, experiences, or opportunities..."
             />
           </div>
 
           {/* Challenges */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              🤔 What challenged me today?
+          <div className="glass rounded-2xl p-6 card-hover">
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
+              <span className="text-2xl">🤔</span>
+              What challenged me today?
             </label>
-            <p className="text-sm text-gray-500 mb-2 italic">
+            <p className="text-sm text-gray-500 mb-3 italic">
               {getRandomPrompt('challenges')}
             </p>
             <textarea
               value={todayEntry.challenges}
               onChange={(e) => setTodayEntry({...todayEntry, challenges: e.target.value})}
-              className="w-full h-20 p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              className="w-full h-20 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
               placeholder="Reflect on difficulties and what you learned..."
             />
           </div>
 
           {/* Tomorrow's Intention */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              🌅 How will I make tomorrow great?
+          <div className="glass rounded-2xl p-6 card-hover">
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
+              <span className="text-2xl">🌅</span>
+              How will I make tomorrow great?
             </label>
-            <p className="text-sm text-gray-500 mb-2 italic">
+            <p className="text-sm text-gray-500 mb-3 italic">
               {getRandomPrompt('tomorrow')}
             </p>
             <textarea
               value={todayEntry.tomorrow}
               onChange={(e) => setTodayEntry({...todayEntry, tomorrow: e.target.value})}
-              className="w-full h-20 p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              className="w-full h-20 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
               placeholder="Set intentions and priorities for tomorrow..."
             />
           </div>
 
           {/* Mood */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              😊 How was my overall day?
+          <div className="glass rounded-2xl p-6 card-hover">
+            <label className="block text-gray-700 font-semibold mb-4 flex items-center gap-2">
+              <span className="text-2xl">😊</span>
+              How was my overall day?
             </label>
-            <div className="flex gap-4">
+            <div className="flex gap-3 flex-wrap justify-center">
               {Object.entries(moodEmojis).map(([mood, emoji]) => (
                 <button
                   key={mood}
                   onClick={() => setTodayEntry({...todayEntry, mood})}
-                  className={`px-4 py-2 rounded-lg border-2 transition-all ${
+                  className={`px-4 py-3 rounded-xl border-2 transition-all btn-scale ${
                     todayEntry.mood === mood
-                      ? 'border-purple-500 bg-purple-100'
-                      : 'border-gray-300 hover:border-purple-300'
+                      ? 'border-purple-500 bg-purple-100 shadow-lg'
+                      : 'border-gray-300 hover:border-purple-300 bg-white/50'
                   }`}
                 >
-                  <div className="text-2xl mb-1">{emoji}</div>
-                  <div className="text-xs capitalize">{mood}</div>
+                  <div className="text-3xl mb-1">{emoji}</div>
+                  <div className="text-xs capitalize font-medium">{mood}</div>
                 </button>
               ))}
             </div>
@@ -264,9 +269,9 @@ const ReflectionJournal = () => {
 
           <button
             onClick={saveEntry}
-            className="w-full px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-semibold"
+            className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:from-purple-700 hover:to-indigo-700 font-semibold text-lg shadow-lg btn-scale transition-all"
           >
-            {hasEntryToday ? 'Update Today\'s Entry' : 'Save Today\'s Entry'}
+            {hasEntryToday ? '✨ Update Today\'s Entry' : '💫 Save Today\'s Entry'}
           </button>
         </div>
       </div>
