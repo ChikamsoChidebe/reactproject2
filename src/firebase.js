@@ -3,12 +3,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
+  apiKey: "AIzaSyBbO0dAcWXXyv6gJ52ChS9lVIs8tStcZcQ",
+  authDomain: "love-eagles-planner-67d3e.firebaseapp.com",
+  projectId: "love-eagles-planner-67d3e",
+  storageBucket: "love-eagles-planner-67d3e.firebasestorage.app",
+  messagingSenderId: "248624976270",
+  appId: "1:248624976270:web:9a1b1a7ac28515689cd4df",
+  measurementId: "G-XD8LER9NKN"
 };
 
 const app = initializeApp(firebaseConfig);

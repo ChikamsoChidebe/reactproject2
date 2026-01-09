@@ -174,11 +174,15 @@ const ReflectionJournal = () => {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Accomplishments */}
           <div className="glass rounded-2xl p-6 card-hover">
-            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
-              <span className="text-2xl">🎯</span>
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
               What did I accomplish today?
             </label>
             <p className="text-sm text-gray-500 mb-3 italic">
@@ -187,15 +191,19 @@ const ReflectionJournal = () => {
             <textarea
               value={todayEntry.accomplishments}
               onChange={(e) => setTodayEntry({...todayEntry, accomplishments: e.target.value})}
-              className="w-full h-24 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
+              className="w-full h-24 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all enhanced-input"
               placeholder="Write about your achievements, progress, and wins today..."
             />
           </div>
 
           {/* Gratitude */}
           <div className="glass rounded-2xl p-6 card-hover">
-            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
-              <span className="text-2xl">🙏</span>
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                </svg>
+              </div>
               What am I grateful for?
             </label>
             <p className="text-sm text-gray-500 mb-3 italic">
@@ -204,15 +212,19 @@ const ReflectionJournal = () => {
             <textarea
               value={todayEntry.gratitude}
               onChange={(e) => setTodayEntry({...todayEntry, gratitude: e.target.value})}
-              className="w-full h-24 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
+              className="w-full h-24 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all enhanced-input"
               placeholder="Express gratitude for people, experiences, or opportunities..."
             />
           </div>
 
           {/* Challenges */}
           <div className="glass rounded-2xl p-6 card-hover">
-            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
-              <span className="text-2xl">🤔</span>
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                </svg>
+              </div>
               What challenged me today?
             </label>
             <p className="text-sm text-gray-500 mb-3 italic">
@@ -221,15 +233,19 @@ const ReflectionJournal = () => {
             <textarea
               value={todayEntry.challenges}
               onChange={(e) => setTodayEntry({...todayEntry, challenges: e.target.value})}
-              className="w-full h-20 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
+              className="w-full h-20 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all enhanced-input"
               placeholder="Reflect on difficulties and what you learned..."
             />
           </div>
 
           {/* Tomorrow's Intention */}
           <div className="glass rounded-2xl p-6 card-hover">
-            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-2">
-              <span className="text-2xl">🌅</span>
+            <label className="block text-gray-700 font-semibold mb-3 flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+              </div>
               How will I make tomorrow great?
             </label>
             <p className="text-sm text-gray-500 mb-3 italic">
@@ -238,40 +254,19 @@ const ReflectionJournal = () => {
             <textarea
               value={todayEntry.tomorrow}
               onChange={(e) => setTodayEntry({...todayEntry, tomorrow: e.target.value})}
-              className="w-full h-20 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all"
+              className="w-full h-20 p-4 border-0 bg-white/50 backdrop-blur-sm rounded-xl focus:ring-2 focus:ring-purple-500 transition-all enhanced-input"
               placeholder="Set intentions and priorities for tomorrow..."
             />
           </div>
 
-          {/* Mood */}
-          <div className="glass rounded-2xl p-6 card-hover">
-            <label className="block text-gray-700 font-semibold mb-4 flex items-center gap-2">
-              <span className="text-2xl">😊</span>
-              How was my overall day?
-            </label>
-            <div className="flex gap-3 flex-wrap justify-center">
-              {Object.entries(moodEmojis).map(([mood, emoji]) => (
-                <button
-                  key={mood}
-                  onClick={() => setTodayEntry({...todayEntry, mood})}
-                  className={`px-4 py-3 rounded-xl border-2 transition-all btn-scale ${
-                    todayEntry.mood === mood
-                      ? 'border-purple-500 bg-purple-100 shadow-lg'
-                      : 'border-gray-300 hover:border-purple-300 bg-white/50'
-                  }`}
-                >
-                  <div className="text-3xl mb-1">{emoji}</div>
-                  <div className="text-xs capitalize font-medium">{mood}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
           <button
             onClick={saveEntry}
-            className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:from-purple-700 hover:to-indigo-700 font-semibold text-lg shadow-lg btn-scale transition-all"
+            className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl hover:from-purple-700 hover:to-indigo-700 font-semibold text-lg shadow-lg btn-scale transition-all flex items-center justify-center gap-2"
           >
-            {hasEntryToday ? '✨ Update Today\'s Entry' : '💫 Save Today\'s Entry'}
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            {hasEntryToday ? 'Update Today\'s Entry' : 'Save Today\'s Entry'}
           </button>
         </div>
       </div>

@@ -27,3 +27,5 @@ function App() {
 
   return <Dashboard user={user} />;
 }
+
+export default App;
