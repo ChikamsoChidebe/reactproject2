@@ -1,0 +1,261 @@
+import React, { useState, useEffect } from 'react';
+
+const AcademicPlanner = () => {
+  const [goals, setGoals] = useState(() => JSON.parse(localStorage.getItem('goals') || '[]'));
+  const [assignments, setAssignments] = useState(() => JSON.parse(localStorage.getItem('assignments') || '[]'));
+  const [newGoal, setNewGoal] = useState('');
+  const [newAssignment, setNewAssignment] = useState({
+    title: '',
+    subject: '',
+    dueDate: '',
+    priority: 'medium',
+    type: 'assignment'
+  });
+
+  useEffect(() => {
+    localStorage.setItem('goals', JSON.stringify(goals));
+    localStorage.setItem('assignments', JSON.stringify(assignments));
+  }, [goals, assignments]);
+
+  const addGoal = () => {
+    if (newGoal.trim()) {
+      setGoals([...goals, {
+        id: Date.now(),
+        text: newGoal,
+        completed: false,
+        progress: 0,
+        createdAt: new Date().toISOString()
+      }]);
+      setNewGoal('');
+    }
+  };
+
+  const addAssignment = () => {
+    if (newAssignment.title && newAssignment.dueDate) {
+      setAssignments([...assignments, {
+        ...newAssignment,
+        id: Date.now(),
+        completed: false,
+        createdAt: new Date().toISOString()
+      }]);
+      setNewAssignment({
+        title: '',
+        subject: '',
+        dueDate: '',
+        priority: 'medium',
+        type: 'assignment'
+      });
+    }
+  };
+
+  const updateProgress = (goalId, progress) => {
+    setGoals(goals.map(goal => 
+      goal.id === goalId ? { ...goal, progress } : goal
+    ));
+  };
+
+  const toggleComplete = (id, type) => {
+    if (type === 'goal') {
+      setGoals(goals.map(goal => 
+        goal.id === id ? { ...goal, completed: !goal.completed } : goal
+      ));
+    } else {
+      setAssignments(assignments.map(assignment => 
+        assignment.id === id ? { ...assignment, completed: !assignment.completed } : assignment
+      ));
+    }
+  };
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'urgent': return 'bg-red-100 border-red-500 text-red-800';
+      case 'high': return 'bg-orange-100 border-orange-500 text-orange-800';
+      case 'medium': return 'bg-yellow-100 border-yellow-500 text-yellow-800';
+      default: return 'bg-green-100 border-green-500 text-green-800';
+    }
+  };
+
+  const getUpcomingDeadlines = () => {
+    const now = new Date();
+    const upcoming = assignments.filter(assignment => {
+      const dueDate = new Date(assignment.dueDate);
+      const diffTime = dueDate - now;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays <= 7 && diffDays >= 0 && !assignment.completed;
+    });
+    return upcoming.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Upcoming Deadlines Alert */}
+      {getUpcomingDeadlines().length > 0 && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+          <h3 className="text-red-800 font-semibold mb-2">🚨 Upcoming Deadlines</h3>
+          {getUpcomingDeadlines().map(assignment => (
+            <div key={assignment.id} className="text-red-700 text-sm">
+              {assignment.title} - Due: {new Date(assignment.dueDate).toLocaleDateString()}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Semester Goals */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-bold text-purple-800 mb-4">📚 Semester Goals</h2>
+          
+          <div className="mb-4">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newGoal}
+                onChange={(e) => setNewGoal(e.target.value)}
+                placeholder="Add a new goal..."
+                className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                onKeyPress={(e) => e.key === 'Enter' && addGoal()}
+              />
+              <button
+                onClick={addGoal}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {goals.map(goal => (
+              <div key={goal.id} className="border border-purple-200 rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`${goal.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                    {goal.text}
+                  </span>
+                  <button
+                    onClick={() => toggleComplete(goal.id, 'goal')}
+                    className={`px-2 py-1 rounded text-xs ${
+                      goal.completed ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    {goal.completed ? '✓' : '○'}
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">Progress:</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={goal.progress}
+                    onChange={(e) => updateProgress(goal.id, parseInt(e.target.value))}
+                    className="flex-1"
+                  />
+                  <span className="text-sm text-purple-600 font-semibold">{goal.progress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                  <div
+                    className="bg-purple-600 h-2 rounded-full transition-all"
+                    style={{ width: `${goal.progress}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Assignments & Deadlines */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-bold text-purple-800 mb-4">📝 Assignments & Deadlines</h2>
+          
+          <div className="mb-4 space-y-2">
+            <input
+              type="text"
+              value={newAssignment.title}
+              onChange={(e) => setNewAssignment({...newAssignment, title: e.target.value})}
+              placeholder="Assignment title..."
+              className="w-full p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newAssignment.subject}
+                onChange={(e) => setNewAssignment({...newAssignment, subject: e.target.value})}
+                placeholder="Subject"
+                className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              />
+              <select
+                value={newAssignment.type}
+                onChange={(e) => setNewAssignment({...newAssignment, type: e.target.value})}
+                className="p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="assignment">Assignment</option>
+                <option value="exam">Exam</option>
+                <option value="project">Project</option>
+                <option value="quiz">Quiz</option>
+              </select>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="date"
+                value={newAssignment.dueDate}
+                onChange={(e) => setNewAssignment({...newAssignment, dueDate: e.target.value})}
+                className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              />
+              <select
+                value={newAssignment.priority}
+                onChange={(e) => setNewAssignment({...newAssignment, priority: e.target.value})}
+                className="p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+              <button
+                onClick={addAssignment}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {assignments
+              .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+              .map(assignment => (
+              <div key={assignment.id} className={`border-l-4 p-3 rounded-lg ${getPriorityColor(assignment.priority)}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className={`font-semibold ${assignment.completed ? 'line-through' : ''}`}>
+                        {assignment.title}
+                      </span>
+                      <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                        {assignment.type}
+                      </span>
+                    </div>
+                    <div className="text-sm mt-1">
+                      <span className="font-medium">{assignment.subject}</span> • 
+                      Due: {new Date(assignment.dueDate).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => toggleComplete(assignment.id, 'assignment')}
+                    className={`px-3 py-1 rounded text-sm ${
+                      assignment.completed ? 'bg-green-500 text-white' : 'bg-white text-gray-700 border'
+                    }`}
+                  >
+                    {assignment.completed ? '✓ Done' : 'Mark Done'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AcademicPlanner;
