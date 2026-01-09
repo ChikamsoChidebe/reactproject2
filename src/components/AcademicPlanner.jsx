@@ -100,24 +100,24 @@ const AcademicPlanner = () => {
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Semester Goals */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-purple-800 mb-4">📚 Semester Goals</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4">📚 Semester Goals</h2>
           
           <div className="mb-4">
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={newGoal}
                 onChange={(e) => setNewGoal(e.target.value)}
                 placeholder="Add a new goal..."
-                className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="flex-1 p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
                 onKeyPress={(e) => e.key === 'Enter' && addGoal()}
               />
               <button
                 onClick={addGoal}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 whitespace-nowrap"
               >
                 Add
               </button>
@@ -128,12 +128,12 @@ const AcademicPlanner = () => {
             {goals.map(goal => (
               <div key={goal.id} className="border border-purple-200 rounded-lg p-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className={`${goal.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
+                  <span className={`text-sm sm:text-base ${goal.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
                     {goal.text}
                   </span>
                   <button
                     onClick={() => toggleComplete(goal.id, 'goal')}
-                    className={`px-2 py-1 rounded text-xs ${
+                    className={`px-2 py-1 rounded text-xs sm:text-sm ${
                       goal.completed ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -141,7 +141,7 @@ const AcademicPlanner = () => {
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Progress:</span>
+                  <span className="text-xs sm:text-sm text-gray-600">Progress:</span>
                   <input
                     type="range"
                     min="0"
@@ -150,7 +150,7 @@ const AcademicPlanner = () => {
                     onChange={(e) => updateProgress(goal.id, parseInt(e.target.value))}
                     className="flex-1"
                   />
-                  <span className="text-sm text-purple-600 font-semibold">{goal.progress}%</span>
+                  <span className="text-xs sm:text-sm text-purple-600 font-semibold">{goal.progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                   <div
@@ -164,8 +164,8 @@ const AcademicPlanner = () => {
         </div>
 
         {/* Assignments & Deadlines */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-purple-800 mb-4">📝 Assignments & Deadlines</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4">📝 Assignments & Deadlines</h2>
           
           <div className="mb-4 space-y-2">
             <input
@@ -173,20 +173,20 @@ const AcademicPlanner = () => {
               value={newAssignment.title}
               onChange={(e) => setNewAssignment({...newAssignment, title: e.target.value})}
               placeholder="Assignment title..."
-              className="w-full p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             />
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={newAssignment.subject}
                 onChange={(e) => setNewAssignment({...newAssignment, subject: e.target.value})}
                 placeholder="Subject"
-                className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="flex-1 p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               />
               <select
                 value={newAssignment.type}
                 onChange={(e) => setNewAssignment({...newAssignment, type: e.target.value})}
-                className="p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="assignment">Assignment</option>
                 <option value="exam">Exam</option>
@@ -194,17 +194,17 @@ const AcademicPlanner = () => {
                 <option value="quiz">Quiz</option>
               </select>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="date"
                 value={newAssignment.dueDate}
                 onChange={(e) => setNewAssignment({...newAssignment, dueDate: e.target.value})}
-                className="flex-1 p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="flex-1 p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               />
               <select
                 value={newAssignment.priority}
                 onChange={(e) => setNewAssignment({...newAssignment, priority: e.target.value})}
-                className="p-2 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+                className="p-2 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -213,7 +213,7 @@ const AcademicPlanner = () => {
               </select>
               <button
                 onClick={addAssignment}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 whitespace-nowrap"
               >
                 Add
               </button>
@@ -225,24 +225,24 @@ const AcademicPlanner = () => {
               .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
               .map(assignment => (
               <div key={assignment.id} className={`border-l-4 p-3 rounded-lg ${getPriorityColor(assignment.priority)}`}>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className={`font-semibold ${assignment.completed ? 'line-through' : ''}`}>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                      <span className={`font-semibold text-sm sm:text-base ${assignment.completed ? 'line-through' : ''}`}>
                         {assignment.title}
                       </span>
-                      <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">
+                      <span className="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded w-fit">
                         {assignment.type}
                       </span>
                     </div>
-                    <div className="text-sm mt-1">
+                    <div className="text-xs sm:text-sm mt-1">
                       <span className="font-medium">{assignment.subject}</span> • 
                       Due: {new Date(assignment.dueDate).toLocaleDateString()}
                     </div>
                   </div>
                   <button
                     onClick={() => toggleComplete(assignment.id, 'assignment')}
-                    className={`px-3 py-1 rounded text-sm ${
+                    className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm whitespace-nowrap ${
                       assignment.completed ? 'bg-green-500 text-white' : 'bg-white text-gray-700 border'
                     }`}
                   >
