@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { groqAPI } from '../services/groq';
 
 const CollaborativeNotes = () => {
   const [notes, setNotes] = useState(() => JSON.parse(localStorage.getItem('notes') || '[]'));
@@ -15,6 +16,7 @@ const CollaborativeNotes = () => {
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [showQuizGenerator, setShowQuizGenerator] = useState(false);
   const [generatedQuiz, setGeneratedQuiz] = useState([]);
+  const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
 
   const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science', 'Literature', 'History'];
 
@@ -79,25 +81,48 @@ const CollaborativeNotes = () => {
     return summary || 'No summary available.';
   };
 
-  const generateQuizQuestions = (content) => {
-    const sentences = content.split('.').filter(s => s.trim().length > 20);
-    const questions = [];
+  const generateQuizQuestions = async (content) => {
+    if (!content.trim()) return;
     
-    sentences.slice(0, 3).forEach((sentence, index) => {
-      const words = sentence.trim().split(' ');
-      if (words.length > 5) {
+    setIsGeneratingQuiz(true);
+    try {
+      const response = await groqAPI.generateQuizQuestions(content);
+      
+      // Try to parse as JSON, fallback to simple questions
+      let questions;
+      try {
+        questions = JSON.parse(response);
+      } catch {
+        // Fallback: create simple questions from response
+        const lines = response.split('\n').filter(line => line.includes('?'));
+        questions = lines.slice(0, 3).map((line, index) => ({
+          id: index + 1,
+          question: line.trim(),
+          answer: 'Answer based on your notes'
+        }));
+      }
+      
+      setGeneratedQuiz(questions);
+      setShowQuizGenerator(true);
+    } catch (error) {
+      console.error('Error generating quiz:', error);
+      // Fallback to original method
+      const sentences = content.split('.').filter(s => s.trim().length > 20);
+      const questions = sentences.slice(0, 3).map((sentence, index) => {
+        const words = sentence.trim().split(' ');
         const keyWord = words[Math.floor(words.length / 2)];
-        questions.push({
+        return {
           id: index + 1,
           question: `What is the significance of "${keyWord}" in this context?`,
           type: 'short-answer',
           context: sentence.trim()
-        });
-      }
-    });
-
-    setGeneratedQuiz(questions);
-    setShowQuizGenerator(true);
+        };
+      });
+      setGeneratedQuiz(questions);
+      setShowQuizGenerator(true);
+    } finally {
+      setIsGeneratingQuiz(false);
+    }
   };
 
   const filteredNotes = notes.filter(note => {

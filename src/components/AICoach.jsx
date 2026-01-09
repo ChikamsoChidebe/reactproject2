@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { groqAPI } from '../services/groq';
 
 const AICoach = () => {
   const [coachAdvice, setCoachAdvice] = useState([]);
@@ -6,6 +7,7 @@ const AICoach = () => {
   const [chatHistory, setChatHistory] = useState(() => 
     JSON.parse(localStorage.getItem('coachChat') || '[]')
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     generateDailyAdvice();
@@ -117,38 +119,38 @@ const AICoach = () => {
     setCoachAdvice(advice);
   };
 
-  const askCoach = () => {
-    if (!userQuestion.trim()) return;
+  const askCoach = async () => {
+    if (!userQuestion.trim() || isLoading) return;
 
-    const responses = {
-      'motivation': 'Remember, Uche Nora and Chikamso Chidebe, you are Love Eagles! Every challenge is an opportunity to soar higher. In God we trust, and with determination, you can overcome any obstacle. 🦅',
-      'study tips': 'Here are my top study tips: 1) Use the Pomodoro technique, 2) Teach concepts to each other, 3) Create visual mind maps, 4) Practice active recall, 5) Take regular breaks. You\'ve got this!',
-      'time management': 'Prioritize your tasks using the Eisenhower Matrix: Urgent & Important first, then Important but not Urgent. Schedule your most challenging work during your peak energy hours.',
-      'stress': 'Feeling stressed is normal! Try deep breathing exercises, take a short walk, or chat with your study partner. Remember, progress over perfection. You\'re doing better than you think! 💙',
-      'focus': 'To improve focus: 1) Remove distractions, 2) Use the Focus Mode in our app, 3) Set specific goals for each session, 4) Reward yourself after completing tasks. Small steps lead to big achievements!',
-      'goals': 'Set SMART goals: Specific, Measurable, Achievable, Relevant, Time-bound. Break big goals into smaller milestones and celebrate each achievement. You\'re building something amazing!'
+    setIsLoading(true);
+    const assignments = JSON.parse(localStorage.getItem('assignments') || '[]');
+    const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+    const moodHistory = JSON.parse(localStorage.getItem('moodHistory') || '[]');
+    
+    const context = {
+      completedAssignments: assignments.filter(a => a.completed).length,
+      totalAssignments: assignments.length,
+      activeGoals: goals.length,
+      recentMood: moodHistory[moodHistory.length - 1]?.mood || 'neutral'
     };
 
-    let response = 'That\'s a great question! Based on your study patterns and progress, I recommend focusing on consistent daily habits. Remember, Love Eagles, every small step counts toward your bigger goals. In God we trust! 🙏';
+    try {
+      const response = await groqAPI.coachResponse(userQuestion, context);
+      
+      const newChat = {
+        id: Date.now(),
+        question: userQuestion,
+        response: response,
+        timestamp: new Date().toISOString()
+      };
 
-    // Simple keyword matching for responses
-    const question = userQuestion.toLowerCase();
-    for (const [keyword, answer] of Object.entries(responses)) {
-      if (question.includes(keyword)) {
-        response = answer;
-        break;
-      }
+      setChatHistory([...chatHistory, newChat]);
+      setUserQuestion('');
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+    } finally {
+      setIsLoading(false);
     }
-
-    const newChat = {
-      id: Date.now(),
-      question: userQuestion,
-      response: response,
-      timestamp: new Date().toISOString()
-    };
-
-    setChatHistory([...chatHistory, newChat]);
-    setUserQuestion('');
   };
 
   const getPriorityColor = (priority) => {
@@ -208,9 +210,19 @@ const AICoach = () => {
           />
           <button
             onClick={askCoach}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            disabled={isLoading}
+            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 flex items-center gap-2"
           >
-            Ask
+            {isLoading ? (
+              <>
+                <svg className="animate-spin w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Thinking...
+              </>
+            ) : (
+              'Ask'
+            )}
           </button>
         </div>
 

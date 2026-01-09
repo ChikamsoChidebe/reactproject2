@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { groqAPI } from '../services/groq';
 
 const TaskSuggestions = () => {
   const [studyPatterns, setStudyPatterns] = useState(() => 
@@ -10,6 +11,7 @@ const TaskSuggestions = () => {
   const [timeLeft, setTimeLeft] = useState(pomodoroTime * 60);
   const [isBreak, setIsBreak] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [isGeneratingSuggestions, setIsGeneratingSuggestions] = useState(false);
 
   useEffect(() => {
     generateSuggestions();
@@ -36,87 +38,53 @@ const TaskSuggestions = () => {
     return () => clearInterval(interval);
   }, [isRunning, timeLeft, pomodoroTime, breakTime, isBreak]);
 
-  const generateSuggestions = () => {
-    const currentHour = new Date().getHours();
+  const generateSuggestions = async () => {
+    setIsGeneratingSuggestions(true);
     const assignments = JSON.parse(localStorage.getItem('assignments') || '[]');
     const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+    const moodHistory = JSON.parse(localStorage.getItem('moodHistory') || '[]');
     
-    const newSuggestions = [];
+    const context = {
+      currentHour: new Date().getHours(),
+      completedAssignments: assignments.filter(a => a.completed).length,
+      totalAssignments: assignments.length,
+      urgentAssignments: assignments.filter(a => {
+        const dueDate = new Date(a.dueDate);
+        const diffDays = Math.ceil((dueDate - new Date()) / (1000 * 60 * 60 * 24));
+        return diffDays <= 3 && diffDays >= 0 && !a.completed;
+      }).length,
+      activeGoals: goals.filter(g => !g.completed).length,
+      recentMood: moodHistory[moodHistory.length - 1]?.mood || 'neutral'
+    };
 
-    // Time-based suggestions
-    if (currentHour >= 6 && currentHour < 12) {
-      newSuggestions.push({
-        id: 1,
-        type: 'time',
-        title: 'Morning Focus Session',
-        description: 'Your brain is fresh! Perfect time for complex problem-solving tasks.',
+    try {
+      const response = await groqAPI.generateStudyTips(context);
+      const aiSuggestions = response.split('\n').filter(line => line.trim()).map((tip, index) => ({
+        id: index + 100,
+        type: 'ai',
+        title: `AI Suggestion ${index + 1}`,
+        description: tip.replace(/^\d+\.\s*/, '').trim(),
         priority: 'high',
-        icon: '🌅'
-      });
-    } else if (currentHour >= 12 && currentHour < 17) {
-      newSuggestions.push({
-        id: 2,
-        type: 'time',
-        title: 'Afternoon Review',
-        description: 'Great time to review notes and consolidate learning.',
-        priority: 'medium',
-        icon: '☀️'
-      });
-    } else {
-      newSuggestions.push({
-        id: 3,
-        type: 'time',
-        title: 'Evening Planning',
-        description: 'Plan tomorrow\'s tasks and do light reading.',
-        priority: 'low',
-        icon: '🌙'
-      });
+        icon: '🤖'
+      }));
+      
+      setSuggestions(aiSuggestions.slice(0, 3));
+    } catch (error) {
+      console.error('Error generating suggestions:', error);
+      // Fallback to static suggestions
+      setSuggestions([
+        {
+          id: 1,
+          type: 'time',
+          title: 'Focus Session Recommended',
+          description: 'Based on your patterns, now is a great time for focused study.',
+          priority: 'high',
+          icon: '🎯'
+        }
+      ]);
+    } finally {
+      setIsGeneratingSuggestions(false);
     }
-
-    // Deadline-based suggestions
-    const urgentAssignments = assignments.filter(assignment => {
-      const dueDate = new Date(assignment.dueDate);
-      const now = new Date();
-      const diffDays = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
-      return diffDays <= 3 && diffDays >= 0 && !assignment.completed;
-    });
-
-    urgentAssignments.forEach(assignment => {
-      newSuggestions.push({
-        id: assignment.id + 100,
-        type: 'urgent',
-        title: `Focus on: ${assignment.title}`,
-        description: `Due soon! Break this into smaller tasks.`,
-        priority: 'urgent',
-        icon: '🚨'
-      });
-    });
-
-    // Goal-based suggestions
-    const incompleteGoals = goals.filter(goal => !goal.completed && goal.progress < 100);
-    if (incompleteGoals.length > 0) {
-      const randomGoal = incompleteGoals[Math.floor(Math.random() * incompleteGoals.length)];
-      newSuggestions.push({
-        id: randomGoal.id + 200,
-        type: 'goal',
-        title: 'Work on Goal Progress',
-        description: `Continue working on: ${randomGoal.text}`,
-        priority: 'medium',
-        icon: '🎯'
-      });
-    }
-
-    // Study pattern suggestions
-    newSuggestions.push({
-      id: 300,
-      type: 'pattern',
-      title: 'Pomodoro Session',
-      description: 'Start a focused 25-minute study session with breaks.',
-      priority: 'high',
-      icon: '🍅'
-    });
-
-    setSuggestions(newSuggestions);
   };
 
   const startPomodoro = () => {
@@ -218,9 +186,19 @@ const TaskSuggestions = () => {
           <h2 className="text-xl font-bold text-purple-800">🤖 Smart Task Suggestions</h2>
           <button
             onClick={generateSuggestions}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            disabled={isGeneratingSuggestions}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 flex items-center gap-2"
           >
-            Refresh Suggestions
+            {isGeneratingSuggestions ? (
+              <>
+                <svg className="animate-spin w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Generating...
+              </>
+            ) : (
+              'Refresh Suggestions'
+            )}
           </button>
         </div>
 

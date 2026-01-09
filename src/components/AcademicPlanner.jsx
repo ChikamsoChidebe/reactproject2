@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFirestore } from '../hooks/useFirebase';
+import { Plus, Target, CheckCircle2, Calendar, AlertTriangle } from 'lucide-react';
 
 const AcademicPlanner = ({ user }) => {
   const { data: goals, saveData: saveGoal } = useFirestore('goals', user?.uid);
@@ -110,10 +111,15 @@ const AcademicPlanner = ({ user }) => {
     <div className="space-y-6">
       {/* Upcoming Deadlines Alert */}
       {getUpcomingDeadlines().length > 0 && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
-          <h3 className="text-red-800 font-semibold mb-2">🚨 Upcoming Deadlines</h3>
+        <div className="glass rounded-2xl p-6 border-l-4 border-red-500 card-hover">
+          <h3 className="text-red-800 font-semibold mb-3 flex items-center gap-2">
+            🚨 <AlertTriangle className="w-5 h-5" /> Upcoming Deadlines
+          </h3>
           {getUpcomingDeadlines().map(assignment => (
-            <div key={assignment.id} className="text-red-700 text-sm">
+            <div key={assignment.id} className="text-red-700 text-sm flex items-center gap-2">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+              </svg>
               {assignment.title} - Due: {new Date(assignment.dueDate).toLocaleDateString()}
             </div>
           ))}
@@ -123,7 +129,9 @@ const AcademicPlanner = ({ user }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Semester Goals */}
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4">📚 Semester Goals</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4 flex items-center gap-2">
+            📚 <Target className="w-5 h-5" /> Semester Goals
+          </h2>
           
           <div className="mb-4">
             <div className="flex flex-col sm:flex-row gap-2">
@@ -137,9 +145,10 @@ const AcademicPlanner = ({ user }) => {
               />
               <button
                 onClick={addGoal}
-                className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 whitespace-nowrap"
+                className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 whitespace-nowrap flex items-center gap-2"
               >
-                Add
+                <Plus className="w-4 h-4" />
+                ➕ Add
               </button>
             </div>
           </div>
@@ -185,7 +194,9 @@ const AcademicPlanner = ({ user }) => {
 
         {/* Assignments & Deadlines */}
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4">📝 Assignments & Deadlines</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4 flex items-center gap-2">
+            📝 <Calendar className="w-5 h-5" /> Assignments & Deadlines
+          </h2>
           
           <div className="mb-4 space-y-2">
             <input
@@ -233,9 +244,10 @@ const AcademicPlanner = ({ user }) => {
               </select>
               <button
                 onClick={addAssignment}
-                className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 whitespace-nowrap"
+                className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-purple-600 text-white rounded-lg hover:bg-purple-700 whitespace-nowrap flex items-center gap-2"
               >
-                Add
+                <Plus className="w-4 h-4" />
+                ➕ Add
               </button>
             </div>
           </div>
