@@ -158,28 +158,28 @@ const StudyTimer = () => {
   return (
     <div className="space-y-6">
       {/* Active Timer */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-purple-800 mb-4">⏰ Study Timer</h2>
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-bold text-purple-800 mb-4">⏰ Study Timer</h2>
         
         <div className="text-center mb-6">
-          <div className="text-6xl font-mono font-bold text-purple-600 mb-4">
+          <div className="text-4xl sm:text-5xl lg:text-6xl font-mono font-bold text-purple-600 mb-4">
             {formatTime(currentSession.duration)}
           </div>
           
           {currentSession.isActive && (
-            <div className="text-lg text-green-600 font-semibold mb-4">
+            <div className="text-base sm:text-lg text-green-600 font-semibold mb-4">
               📚 Studying {currentSession.subject}
             </div>
           )}
         </div>
 
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 sm:space-y-4 mb-6">
           <input
             type="text"
             value={currentSession.subject}
             onChange={(e) => setCurrentSession(prev => ({...prev, subject: e.target.value}))}
             placeholder="Subject (e.g., Mathematics, Physics)"
-            className="w-full p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            className="w-full p-2 sm:p-3 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             disabled={currentSession.isActive}
           />
           
@@ -188,17 +188,17 @@ const StudyTimer = () => {
             value={currentSession.task}
             onChange={(e) => setCurrentSession(prev => ({...prev, task: e.target.value}))}
             placeholder="Specific task (optional)"
-            className="w-full p-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
+            className="w-full p-2 sm:p-3 text-sm sm:text-base border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500"
             disabled={currentSession.isActive}
           />
         </div>
 
-        <div className="flex justify-center gap-4 mb-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-4">
           {!currentSession.isActive ? (
             <button
               onClick={startSession}
               disabled={!currentSession.subject.trim()}
-              className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 font-semibold"
+              className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 font-semibold"
             >
               Start Session
             </button>
@@ -206,13 +206,13 @@ const StudyTimer = () => {
             <>
               <button
                 onClick={pauseSession}
-                className="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold"
+                className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold"
               >
                 Pause
               </button>
               <button
                 onClick={endSession}
-                className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 font-semibold"
+                className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-lg hover:bg-red-600 font-semibold"
               >
                 End Session
               </button>
@@ -220,7 +220,7 @@ const StudyTimer = () => {
           )}
         </div>
 
-        <div className="flex items-center justify-center gap-4 text-sm">
+        <div className="flex items-center justify-center gap-4 text-xs sm:text-sm">
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -234,51 +234,51 @@ const StudyTimer = () => {
       </div>
 
       {/* Today's Stats */}
-      <div className="grid md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-blue-600 mb-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 text-center">
+          <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">
             {formatTime(todayStats.totalTime)}
           </div>
-          <div className="text-gray-600 text-sm">Today's Study Time</div>
+          <div className="text-gray-600 text-xs sm:text-sm">Today's Study Time</div>
           <div className="text-xs text-gray-500 mt-1">{todayStats.sessionCount} sessions</div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-green-600 mb-2">{studyStreak}</div>
-          <div className="text-gray-600 text-sm">Day Study Streak</div>
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 text-center">
+          <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">{studyStreak}</div>
+          <div className="text-gray-600 text-xs sm:text-sm">Day Study Streak</div>
           <div className="text-xs text-gray-500 mt-1">Keep it going! 🔥</div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 text-center">
-          <div className="text-3xl font-bold text-purple-600 mb-2">
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 text-center sm:col-span-2 lg:col-span-1">
+          <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-2">
             {formatTime(weeklyStats.avgDaily)}
           </div>
-          <div className="text-gray-600 text-sm">Daily Average</div>
+          <div className="text-gray-600 text-xs sm:text-sm">Daily Average</div>
           <div className="text-xs text-gray-500 mt-1">This week</div>
         </div>
       </div>
 
       {/* Subject Breakdown */}
       {subjectBreakdown.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-bold text-purple-800 mb-4">📊 Subject Time Breakdown</h3>
-          <div className="space-y-3">
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold text-purple-800 mb-4">📊 Subject Time Breakdown</h3>
+          <div className="space-y-2 sm:space-y-3">
             {subjectBreakdown.map(([subject, time]) => {
               const percentage = ((time / sessions.reduce((sum, s) => sum + s.duration, 0)) * 100).toFixed(1);
               return (
-                <div key={subject} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={subject} className="flex flex-col sm:flex-row sm:items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg gap-2">
                   <div className="flex-1">
-                    <div className="font-medium text-gray-800">{subject}</div>
-                    <div className="text-sm text-gray-600">{formatTime(time)} total</div>
+                    <div className="font-medium text-gray-800 text-sm sm:text-base">{subject}</div>
+                    <div className="text-xs sm:text-sm text-gray-600">{formatTime(time)} total</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 bg-gray-200 rounded-full h-2">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-20 sm:w-24 bg-gray-200 rounded-full h-2">
                       <div
                         className="bg-purple-600 h-2 rounded-full transition-all"
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
-                    <span className="text-sm font-semibold text-purple-600 w-12">
+                    <span className="text-xs sm:text-sm font-semibold text-purple-600 w-10 sm:w-12">
                       {percentage}%
                     </span>
                   </div>
@@ -290,29 +290,29 @@ const StudyTimer = () => {
       )}
 
       {/* Recent Sessions */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-bold text-purple-800 mb-4">📝 Recent Sessions</h3>
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <h3 className="text-base sm:text-lg font-bold text-purple-800 mb-4">📝 Recent Sessions</h3>
         
         {sessions.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No study sessions yet. Start your first session!</p>
+          <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">No study sessions yet. Start your first session!</p>
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {sessions
               .sort((a, b) => new Date(b.endTime) - new Date(a.endTime))
               .slice(0, 10)
               .map(session => (
-                <div key={session.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg gap-2">
                   <div className="flex-1">
-                    <div className="font-medium text-gray-800">{session.subject}</div>
+                    <div className="font-medium text-gray-800 text-sm sm:text-base">{session.subject}</div>
                     {session.task && (
-                      <div className="text-sm text-gray-600">{session.task}</div>
+                      <div className="text-xs sm:text-sm text-gray-600">{session.task}</div>
                     )}
                     <div className="text-xs text-gray-500">
                       {new Date(session.date).toLocaleDateString()}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-purple-600">
+                  <div className="text-left sm:text-right">
+                    <div className="font-semibold text-purple-600 text-sm sm:text-base">
                       {formatTime(session.duration)}
                     </div>
                   </div>
