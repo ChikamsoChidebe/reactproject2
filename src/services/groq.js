@@ -1,4 +1,4 @@
-const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY || 'your-groq-api-key-here';
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || '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';
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 export const groqAPI = {

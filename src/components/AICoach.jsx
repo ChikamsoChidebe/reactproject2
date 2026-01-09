@@ -282,18 +282,18 @@ const AICoach = () => {
         <h3 className="text-lg font-bold mb-4">✨ Weekly Wisdom for Love Eagles</h3>
         
         <div className="space-y-3">
-          <div className="bg-white bg-opacity-20 rounded-lg p-3">
-            <h4 className="font-semibold mb-1">🎯 This Week's Focus</h4>
+          <div className="bg-white/20 rounded-lg p-3">
+            <h4 className="font-semibold mb-1 text-white">🎯 This Week's Focus</h4>
             <p className="text-purple-100">Consistency beats perfection. Small daily actions lead to extraordinary results.</p>
           </div>
           
-          <div className="bg-white bg-opacity-20 rounded-lg p-3">
-            <h4 className="font-semibold mb-1">💡 Study Technique Spotlight</h4>
+          <div className="bg-white/20 rounded-lg p-3">
+            <h4 className="font-semibold mb-1 text-white">💡 Study Technique Spotlight</h4>
             <p className="text-purple-100">Try the Feynman Technique: Explain concepts in simple terms as if teaching a friend.</p>
           </div>
           
-          <div className="bg-white bg-opacity-20 rounded-lg p-3">
-            <h4 className="font-semibold mb-1">🙏 Inspiration</h4>
+          <div className="bg-white/20 rounded-lg p-3">
+            <h4 className="font-semibold mb-1 text-white">🙏 Inspiration</h4>
             <p className="text-purple-100">"In God we trust, in ourselves we believe. You are Love Eagles - soar high!" - Your AI Coach</p>
           </div>
         </div>
