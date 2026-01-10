@@ -16,7 +16,8 @@
 1. Go to "Authentication" in Firebase Console
 2. Click "Get started"
 3. Go to "Sign-in method" tab
-4. Enable "Anonymous" authentication
+4. Enable "Google" authentication
+5. Add your authorized domains
 
 ## 4. Get Configuration
 1. Go to Project Settings (gear icon)
@@ -46,10 +47,13 @@ const firebaseConfig = {
 4. Check Firebase Console to see data syncing
 
 ## Features Now Available:
-✅ Anonymous authentication
+✅ Google authentication
 ✅ Real-time data sync
 ✅ Cloud storage for tasks, goals, assignments
-✅ User preferences sync
+✅ Auto-save drafts while typing
+✅ Quiz generator with scoring
+✅ Streak tracking
+✅ Shared workspace
 ✅ Cross-device access
 
 ## Next Steps:

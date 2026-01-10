@@ -10,7 +10,7 @@ import PerformanceInsights from './PerformanceInsights';
 import StudyTimer from './StudyTimer';
 import VoiceCommands from './VoiceCommands';
 import AICoach from './AICoach';
-import ReflectionJournal from './ReflectionJournal';
+import QuizGenerator from './QuizGenerator';
 
 const Dashboard = ({ user }) => {
   const { data: userPrefs, saveData: savePrefs } = useFirestore('preferences', user?.uid);
@@ -36,6 +36,7 @@ const Dashboard = ({ user }) => {
     { id: 'planner', name: 'Planner', emoji: '📅', icon: <Calendar className="w-5 h-5" /> },
     { id: 'tasks', name: 'Smart Tasks', emoji: '🤖', icon: <Target className="w-5 h-5" /> },
     { id: 'notes', name: 'Notes', emoji: '📝', icon: <BookOpen className="w-5 h-5" /> },
+    { id: 'quiz', name: 'Quiz', emoji: '🧠', icon: <Brain className="w-5 h-5" /> },
     { id: 'mood', name: 'Mood', emoji: '😊', icon: <Smile className="w-5 h-5" /> },
     { id: 'insights', name: 'Insights', emoji: '📊', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'timer', name: 'Timer', emoji: '⏰', icon: <Clock className="w-5 h-5" /> },
@@ -50,6 +51,7 @@ const Dashboard = ({ user }) => {
       case 'planner': return <AcademicPlanner user={user} />;
       case 'tasks': return <TaskSuggestions />;
       case 'notes': return <CollaborativeNotes />;
+      case 'quiz': return <QuizGenerator user={user} />;
       case 'mood': return <MoodTracker />;
       case 'insights': return <PerformanceInsights />;
       case 'timer': return <StudyTimer />;

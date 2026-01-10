@@ -77,13 +77,23 @@ const AcademicPlanner = ({ user }) => {
 
   const toggleComplete = (id, type) => {
     if (type === 'goal') {
-      setGoals(goals.map(goal => 
+      const updatedGoals = localGoals.map(goal => 
         goal.id === id ? { ...goal, completed: !goal.completed } : goal
-      ));
+      );
+      setLocalGoals(updatedGoals);
+      if (user) {
+        const goal = updatedGoals.find(g => g.id === id);
+        saveGoal(id.toString(), goal);
+      }
     } else {
-      setAssignments(assignments.map(assignment => 
+      const updatedAssignments = localAssignments.map(assignment => 
         assignment.id === id ? { ...assignment, completed: !assignment.completed } : assignment
-      ));
+      );
+      setLocalAssignments(updatedAssignments);
+      if (user) {
+        const assignment = updatedAssignments.find(a => a.id === id);
+        saveAssignment(id.toString(), assignment);
+      }
     }
   };
 

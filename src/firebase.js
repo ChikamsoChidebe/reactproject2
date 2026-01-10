@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, orderBy } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBbO0dAcWXXyv6gJ52ChS9lVIs8tStcZcQ",
@@ -13,6 +14,49 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
 export const auth = getAuth(app);
-export default app;
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+
+const provider = new GoogleAuthProvider();
+
+export const signInWithGoogle = () => signInWithPopup(auth, provider);
+export const logout = () => signOut(auth);
+
+// Auto-save draft functionality
+export const saveDraft = async (userId, type, data) => {
+  if (!userId) return;
+  await setDoc(doc(db, 'drafts', `${userId}_${type}`), {
+    ...data,
+    updatedAt: new Date(),
+    userId
+  });
+};
+
+export const getDraft = async (userId, type) => {
+  if (!userId) return null;
+  const docRef = doc(db, 'drafts', `${userId}_${type}`);
+  const docSnap = await getDoc(docRef);
+  return docSnap.exists() ? docSnap.data() : null;
+};
+
+// Shared workspace functions
+export const saveSharedData = async (type, data, userId) => {
+  await addDoc(collection(db, 'shared', type, 'items'), {
+    ...data,
+    createdBy: userId,
+    createdAt: new Date(),
+    sharedWith: ['uche_nora', 'chikamso_chidebe'] // Replace with actual user IDs
+  });
+};
+
+export const getUserData = async (userId, collection) => {
+  const q = query(
+    collection(db, collection),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc')
+  );
+  return onSnapshot(q, (snapshot) => {
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  });
+};
