@@ -19,8 +19,27 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 const provider = new GoogleAuthProvider();
+provider.setCustomParameters({
+  prompt: 'select_account'
+});
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
+let signInInProgress = false;
+
+export const signInWithGoogle = async () => {
+  if (signInInProgress) return;
+  signInInProgress = true;
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result;
+  } catch (error) {
+    if (error.code !== 'auth/cancelled-popup-request') {
+      console.error('Sign in error:', error);
+    }
+    throw error;
+  } finally {
+    signInInProgress = false;
+  }
+};
 export const logout = () => signOut(auth);
 
 // Auto-save draft functionality
