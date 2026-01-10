@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, orderBy } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -29,15 +29,22 @@ export const signInWithGoogle = async () => {
   if (signInInProgress) return;
   signInInProgress = true;
   try {
-    const result = await signInWithPopup(auth, provider);
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    console.error('Sign in error:', error);
+    signInInProgress = false;
+    throw error;
+  }
+};
+
+export const handleRedirectResult = async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    signInInProgress = false;
     return result;
   } catch (error) {
-    if (error.code !== 'auth/cancelled-popup-request') {
-      console.error('Sign in error:', error);
-    }
-    throw error;
-  } finally {
     signInInProgress = false;
+    throw error;
   }
 };
 export const logout = () => signOut(auth);
