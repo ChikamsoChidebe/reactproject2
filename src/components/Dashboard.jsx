@@ -11,6 +11,7 @@ import StudyTimer from './StudyTimer';
 import VoiceCommands from './VoiceCommands';
 import AICoach from './AICoach';
 import QuizGenerator from './QuizGenerator';
+import QuizDashboard from './QuizDashboard';
 
 const Dashboard = ({ user }) => {
   const { data: userPrefs, saveData: savePrefs } = useFirestore('preferences', user?.uid);
@@ -37,6 +38,7 @@ const Dashboard = ({ user }) => {
     { id: 'tasks', name: 'Smart Tasks', emoji: '🤖', icon: <Target className="w-5 h-5" /> },
     { id: 'notes', name: 'Notes', emoji: '📝', icon: <BookOpen className="w-5 h-5" /> },
     { id: 'quiz', name: 'Quiz', emoji: '🧠', icon: <Brain className="w-5 h-5" /> },
+    { id: 'quiz-dashboard', name: 'Quiz Stats', emoji: '📊', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'mood', name: 'Mood', emoji: '😊', icon: <Smile className="w-5 h-5" /> },
     { id: 'insights', name: 'Insights', emoji: '📊', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'timer', name: 'Timer', emoji: '⏰', icon: <Clock className="w-5 h-5" /> },
@@ -52,6 +54,7 @@ const Dashboard = ({ user }) => {
       case 'tasks': return <TaskSuggestions />;
       case 'notes': return <CollaborativeNotes />;
       case 'quiz': return <QuizGenerator user={user} />;
+      case 'quiz-dashboard': return <QuizDashboard user={user} />;
       case 'mood': return <MoodTracker />;
       case 'insights': return <PerformanceInsights />;
       case 'timer': return <StudyTimer />;
@@ -204,7 +207,7 @@ const Dashboard = ({ user }) => {
       } bg-gradient-to-r from-purple-800 via-purple-900 to-indigo-900 text-white`}>
         <div className="container mx-auto px-6 text-center">
           <div className="flex flex-col items-center space-y-2">
-            <p className="text-lg font-semibold">Love Eagles Academic Planner &copy; 2024</p>
+            <p className="text-lg font-semibold">Love Eagles Academic Planner &copy; 2026</p>
             <p className="text-purple-200">Uche Nora & Chikamso Chidebe</p>
             <p className="text-purple-300 text-sm font-medium">In God We Trust 🙏</p>
           </div>
